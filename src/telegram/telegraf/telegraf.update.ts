@@ -1,5 +1,4 @@
 import { Update, Ctx, Start, Help, On, Hears } from 'nestjs-telegraf';
-//   import { TelegrafContext } from './common/interfaces/telegraf-context.interface.ts';
 
 @Update()
 export class TelegrafUpdate {
