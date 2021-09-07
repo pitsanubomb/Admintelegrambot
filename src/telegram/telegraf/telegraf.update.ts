@@ -11,14 +11,36 @@ export class TelegrafUpdate {
 
   @On('my_chat_member')
   async onMychatmem(@Ctx() ctx: any) {
+    console.log(
+      `___________________Event Group Chat________________________________`,
+    );
+    console.log(ctx);
     console.log(ctx.chat);
   }
 
   @On('new_chat_members')
   async onNewChat(@Ctx() ctx: any) {
+    console.log(
+      `___________________Have Join group Chat________________________________`,
+    );
     console.log(ctx.update.message);
   }
- 
+
+  @On('supergroup_chat_created')
+  async oneCreateAdmin(@Ctx() ctx: any) {
+    console.log(
+      `___________________Have Create Admin________________________________`,
+      console.log(ctx),
+    );
+  }
+
+  @On('left_chat_member')
+  async onLeftChatMember(ctx: any) {
+    console.log(
+      `___________________Have User Leave Chat________________________________`,
+      console.log(ctx),
+    );
+  }
 
   // @Help()
   // async help(@Ctx() ctx: TelegrafContext) {
