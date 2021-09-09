@@ -14,6 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       username: 'rjdhlfwaqxpncv',
       password: '304aefa7acdaf02adc7fe306798538e5ee44d5d02387ed023dc66dc60e1b1d18',
       database: 'dafsck06itqjrd',
+      ssl: true,
       entities: ["dist/**/*.entity{.ts,.js}"],
       synchronize: true,
     }),
