@@ -7,6 +7,12 @@
     "database": "dcamoo9f2ub4bc",
     "synchronize": true,
     "logging": true,
+    "ssl": true,
+    "extra":{
+        "ssl": {
+            "rejectUnauthorized": false
+        }
+    },
     "entities": [
         "dist/**/*.entity{.ts,.js}"
     ]
