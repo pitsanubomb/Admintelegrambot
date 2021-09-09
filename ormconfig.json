@@ -7,6 +7,7 @@
     "database": "dafsck06itqjrd",
     "synchronize": true,
     "logging": true,
+    "ssl": true,
     "entities": [
         "dist/**/*.entity{.ts,.js}"
     ]
