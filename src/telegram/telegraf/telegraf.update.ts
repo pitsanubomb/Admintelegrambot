@@ -1,4 +1,4 @@
-import { Update, Ctx, Start, Help, On, Hears } from 'nestjs-telegraf';
+import { Update, Ctx, Start, On } from 'nestjs-telegraf';
 
 @Update()
 export class TelegrafUpdate {
