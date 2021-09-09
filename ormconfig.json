@@ -2,12 +2,11 @@
     "type": "postgres",
     "host": "ec2-54-147-126-173.compute-1.amazonaws.com",
     "port": 5432,
-    "username": "rjdhlfwaqxpncv",
-    "password": "304aefa7acdaf02adc7fe306798538e5ee44d5d02387ed023dc66dc60e1b1d18",
-    "database": "dafsck06itqjrd",
+    "username": "ybewmnsbwuluws",
+    "password": "d3477836266cc17697a26b8ed6328a85a28ddafa54d6814308c820b024f1b4b1",
+    "database": "dcamoo9f2ub4bc",
     "synchronize": true,
     "logging": true,
-    "ssl": true,
     "entities": [
         "dist/**/*.entity{.ts,.js}"
     ]
