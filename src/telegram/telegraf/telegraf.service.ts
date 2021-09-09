@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Markup, Telegram } from 'telegraf';
-import { button } from 'telegraf/typings/markup';
+// import { button } from 'telegraf/typings/markup';
 
 @Injectable()
 export class TelegrafService {
@@ -13,11 +13,11 @@ export class TelegrafService {
     ]);
   }
 
-  sendMessage(id: string, message: string) {
+  sendMessage(id: string | number, message: string) {
     this.bot.sendMessage(id, message);
   }
 
-  sendHTMLMessage(id: string, message: string) {
+  sendHTMLMessage(id: string | number, message: string) {
     console.log(message);
     this.bot.sendMessage(id, `${message}`, { parse_mode: 'HTML' });
   }
