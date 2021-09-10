@@ -16,7 +16,7 @@ export class UserService {
     try {
       return await this.teleUserrepo.save(user);
     } catch (error) {
-     console.log(`Can't inser user`)
+      throws(error);
     }
   }
 
@@ -24,7 +24,7 @@ export class UserService {
     try {
       return await this.teleUserrepo.findOneOrFail({ where: { id: id } });
     } catch (error) {
-      console.log(`Not have user or Error`)
+      throws(error);
     }
   }
 }

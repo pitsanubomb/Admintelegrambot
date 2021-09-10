@@ -14,15 +14,14 @@ export class TelegrafService {
   }
 
   sendMessage(id: string | number, message: string) {
-    this.bot.sendMessage(id, message);
+    return this.bot.sendMessage(id, message);
   }
 
   sendHTMLMessage(id: string | number, message: string) {
-    console.log(message);
-    this.bot.sendMessage(id, `${message}`, { parse_mode: 'HTML' });
+    return this.bot.sendMessage(id, `${message}`, { parse_mode: 'HTML' });
   }
 
   sendImageMessage(id: string | number, img: string) {
-    this.bot.sendPhoto(id, img, this.createButton());
+    return this.bot.sendPhoto(id, img, this.createButton());
   }
 }

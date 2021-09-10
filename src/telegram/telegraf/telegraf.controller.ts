@@ -1,21 +1,55 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { UserService } from './user.service';
+import {
+  Body,
+  Controller,
+  Post,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { TelegrafService } from './telegraf.service';
 
 @Controller('telegram')
 export class TelegrafController {
-  constructor(private readonly telegraf: TelegrafService) {}
+  constructor(
+    private readonly telegraf: TelegrafService,
+    private readonly userService: UserService,
+  ) {}
 
   @Post()
-  postData(@Body() data: any) {
-    this.telegraf.sendMessage(data.id, data.message);
+  async postData(@Body() data: any) {
+    try {
+      await this.userService.findUserById(data.id);
+      this.telegraf.sendMessage(data.id, data.message);
+    } catch (error) {
+      throw new HttpException(
+        { messsage: `ไม่สามารถส่งข้อความได้`, error },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   @Post(`html`)
-  postDataHTml(@Body() data: any) {
+  async postDataHTml(@Body() data: any) {
+    try {
+      await this.userService.findUserById(data.id);
       this.telegraf.sendHTMLMessage(data.id, data.message);
+    } catch (error) {
+      throw new HttpException(
+        { messsage: `ไม่สามารถส่งข้อความได้`, error },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
   @Post(`image`)
-  postDataImage(@Body() data: any) {
-      this.telegraf.sendImageMessage(data.id, data.image);
+  async postDataImage(@Body() data: any) {
+    try {
+      await this.userService.findUserById(data.id);
+      return this.telegraf.sendImageMessage(data.id, data.image);
+    } catch (error) {
+      throw new HttpException(
+        { messsage: `ไม่สามารถส่งข้อความได้`, error },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }
