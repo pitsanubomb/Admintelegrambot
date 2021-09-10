@@ -1,6 +1,7 @@
 import { UserService } from './user.service';
 import { Injectable } from '@nestjs/common';
-import { Update, Ctx, Start, On } from 'nestjs-telegraf';
+import { Update, Ctx, Start, On, Hears, Command } from 'nestjs-telegraf';
+import { throws } from 'assert/strict';
 
 @Injectable()
 @Update()
@@ -46,33 +47,47 @@ export class TelegrafUpdateService {
     );
   }
 
-  @On('text')
-  async onText(ctx: any) {
-    const id = await this.userService.findUserById(ctx.message.from.id);
-    if (!id) {
-      console.log(`Save user`)
-      // ctx.reply(`${ctx.update.message.from.id}`);
-      if (id !== ctx.update.message.from.id) {
-        console.log(ctx.message);
-        let body = {
-          id: ctx.update.message.from.id,
-          username: ctx.update.message.from.username,
-          firstname: ctx.update.message.from.first_name,
-          isBot: ctx.update.message.from.is_bot,
-        };
-        await this.userService.addUser(body);
-      }
-    }
+  @Hears('hi')
+  async hears(@Ctx() ctx: any) {
+    await ctx.reply('Hey there');
   }
+
+  @Command('users')
+  async findList(@Ctx() ctx: any) {
+    await ctx.reply('Users is ')
+  }
+
+  // @On('text')
+  // async onText(ctx: any) {
+  //   try {
+  //     const id = await this.userService.findUserById(ctx.message.from.id);
+  //     if (!id) {
+  //       if (id !== ctx.update.message.from.id) {
+  //         let body = {
+  //           id: ctx.update.message.from.id,
+  //           username: ctx.update.message.from.username,
+  //           firstname: ctx.update.message.from.first_name,
+  //           isBot: ctx.update.message.from.is_bot,
+  //         };
+  //         await this.userService.addUser(body);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     throws(error);
+  //   }
+  // }
 
   @On('message')
   async onMessage(ctx: any) {
-    console.log(
-      `___________________Have Some Message________________________________`,
-    );
-    console.log(ctx);
-    console.log(ctx.update);
+    // await ctx.reply('aaa')
+    console.log(ctx.update.message);
+    // console.log(
+    //   `___________________Have Some Message________________________________`,
+    // );
+    // console.log(ctx);
+    // console.log(ctx.update);
   }
+
   // @Help()
   // async help(@Ctx() ctx: TelegrafContext) {
   //   await ctx.reply('Send me a sticker');
@@ -81,10 +96,5 @@ export class TelegrafUpdateService {
   // @On('sticker')
   // async on(@Ctx() ctx: TelegrafContext) {
   //   await ctx.reply('👍');
-  // }
-
-  // @Hears('hi')
-  // async hears(@Ctx() ctx: TelegrafContext) {
-  //   await ctx.reply('Hey there');
   // }
 }

@@ -6,11 +6,11 @@ import { Markup, Telegram } from 'telegraf';
 export class TelegrafService {
   public bot = new Telegram(`1999148298:AAFAU6RA01AvwqPrMWvgEhRA_dPDPDlZmMs`);
 
-  createButton() {
-    return Markup.inlineKeyboard([
-        Markup.button.url(`Google`, `https://www.google.com`),
-        Markup.button.url(`xxxx`, `https://www.google.com`),
-    ]);
+  createButton(obj: Object, show: number) {
+    const but = Object.keys(obj).map((key) =>
+      Markup.button.url(key, obj[key]),
+    );
+    return Markup.inlineKeyboard(but, { columns: show });
   }
 
   sendMessage(id: string | number, message: string) {
@@ -21,7 +21,12 @@ export class TelegrafService {
     return this.bot.sendMessage(id, `${message}`, { parse_mode: 'HTML' });
   }
 
-  sendImageMessage(id: string | number, img: string) {
-    return this.bot.sendPhoto(id, img, this.createButton());
+  sendImageMessage(
+    id: string | number,
+    img: string,
+    show: number,
+    data: Object,
+  ) {
+    return this.bot.sendPhoto(id, img, this.createButton(data, show));
   }
 }

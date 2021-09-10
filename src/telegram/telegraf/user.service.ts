@@ -1,6 +1,6 @@
 import { TelegramuserDTO } from '../dto/telegramuser.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Telegramuser } from '../entity/telegramuser.entity';
 import { throws } from 'assert';

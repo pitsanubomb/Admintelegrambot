@@ -44,7 +44,12 @@ export class TelegrafController {
   async postDataImage(@Body() data: any) {
     try {
       await this.userService.findUserById(data.id);
-      return this.telegraf.sendImageMessage(data.id, data.image);
+      return this.telegraf.sendImageMessage(
+        data.id,
+        data.image,
+        data.show,
+        data.data,
+      );
     } catch (error) {
       throw new HttpException(
         { messsage: `ไม่สามารถส่งข้อความได้`, error },
