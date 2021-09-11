@@ -25,10 +25,24 @@ export class TelegrafUpdateService {
 
   @On('new_chat_members')
   async onNewChat(@Ctx() ctx: any) {
-    console.log(
-      `___________________Have Join group Chat________________________________`,
-    );
-    console.log(ctx.update.message);
+    try {
+      const id = await this.userService.findUserById(ctx.message.from.id);
+      console.log(ctx.message)
+      if (!id) {
+        console.log(ctx.update);
+        if (id !== ctx.update.message.from.id) {
+          let body = {
+            id: ctx.update.message.from.id,
+            username: ctx.update.message.from.username,
+            firstname: ctx.update.message.from.first_name,
+            isBot: ctx.update.message.from.is_bot,
+          };
+          await this.userService.addUser(body);
+        }
+      }
+    } catch (error) {
+      throws(error);
+    }
   }
 
   @On('supergroup_chat_created')
@@ -59,7 +73,7 @@ export class TelegrafUpdateService {
 
   @On('text')
   async onText(ctx: any) {
-    console.log(`________________Have Text___________________`);
+    console.log(ctx.message);
     try {
       const id = await this.userService.findUserById(ctx.message.from.id);
       if (!id) {
