@@ -1,8 +1,8 @@
-import { TelegramuserDTO } from '../dto/telegramuser.dto';
+import { TelegramuserDTO } from './dto/telegramuser.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Telegramuser } from '../entity/telegramuser.entity';
+import { Telegramuser } from './entity/telegramuser.entity';
 import { throws } from 'assert';
 
 @Injectable()
@@ -15,6 +15,15 @@ export class UserService {
   async addUser(user: TelegramuserDTO): Promise<any> {
     try {
       return await this.teleUserrepo.save(user);
+    } catch (error) {
+      throws(error);
+    }
+  }
+
+  async getAllUsers(): Promise<any> {
+    try {
+      const [res, count] = await this.teleUserrepo.findAndCount();
+      return { data: res, count: count };
     } catch (error) {
       throws(error);
     }

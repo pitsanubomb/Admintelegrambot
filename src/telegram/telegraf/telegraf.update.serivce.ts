@@ -1,7 +1,6 @@
-import { UserService } from './user.service';
+import { UserService } from './../../users/user.service';
 import { Injectable } from '@nestjs/common';
 import { Update, Ctx, Start, On, Hears, Command } from 'nestjs-telegraf';
-import { throws } from 'assert/strict';
 
 @Injectable()
 @Update()

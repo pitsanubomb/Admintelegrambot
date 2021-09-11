@@ -29,4 +29,8 @@ export class TelegrafService {
   ) {
     return this.bot.sendPhoto(id, img, this.createButton(data, show));
   }
+
+  async getChat(id:number | string) {
+    return await this.bot.getChat(id);
+  }
 }

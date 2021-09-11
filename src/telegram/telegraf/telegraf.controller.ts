@@ -1,10 +1,10 @@
-import { UserService } from './user.service';
+import { UserService } from '../../users/user.service';
 import {
   Body,
   Controller,
   Post,
   HttpException,
-  HttpStatus,
+  HttpStatus
 } from '@nestjs/common';
 import { TelegrafService } from './telegraf.service';
 
@@ -40,6 +40,7 @@ export class TelegrafController {
       );
     }
   }
+
   @Post(`image`)
   async postDataImage(@Body() data: any) {
     try {
@@ -48,7 +49,7 @@ export class TelegrafController {
         data.id,
         data.image,
         data.show,
-        data.data,
+        data.button,
       );
     } catch (error) {
       throw new HttpException(
