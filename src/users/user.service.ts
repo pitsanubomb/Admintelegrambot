@@ -33,7 +33,8 @@ export class UserService {
     try {
       return await this.teleUserrepo.findOneOrFail({ where: { id: id } });
     } catch (error) {
-      throws(error);
+      // console.log(`Have error`)
+      // throws(error);
     }
   }
 }

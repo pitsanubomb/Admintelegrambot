@@ -26,18 +26,20 @@ export class TelegrafUpdateService {
   @On('new_chat_members')
   async onNewChat(@Ctx() ctx: any) {
     try {
-      const id = await this.userService.findUserById(ctx.message.from.id);
-      console.log(ctx.message)
-      if (!id) {
-        console.log(ctx.update);
-        if (id !== ctx.update.message.from.id) {
-          let body = {
-            id: ctx.update.message.from.id,
-            username: ctx.update.message.from.username,
-            firstname: ctx.update.message.from.first_name,
-            isBot: ctx.update.message.from.is_bot,
-          };
-          await this.userService.addUser(body);
+      if (ctx.message.is_bot === false) {
+        const id = await this.userService.findUserById(
+          ctx.message.new_chat_member.id,
+        );
+        if (!id) {
+          if (id !== ctx.message.new_chat_member.id) {
+            let body = {
+              id: ctx.message.new_chat_member.id,
+              username: ctx.message.new_chat_member.username,
+              firstname: ctx.message.new_chat_member.first_name,
+              isBot: ctx.message.new_chat_member.is_bot,
+            };
+            await this.userService.addUser(body);
+          }
         }
       }
     } catch (error) {
@@ -73,18 +75,19 @@ export class TelegrafUpdateService {
 
   @On('text')
   async onText(ctx: any) {
-    console.log(ctx.message);
     try {
-      const id = await this.userService.findUserById(ctx.message.from.id);
-      if (!id) {
-        if (id !== ctx.update.message.from.id) {
-          let body = {
-            id: ctx.update.message.from.id,
-            username: ctx.update.message.from.username,
-            firstname: ctx.update.message.from.first_name,
-            isBot: ctx.update.message.from.is_bot,
-          };
-          await this.userService.addUser(body);
+      if (ctx.message.from.is_bot === false) {
+        const id = await this.userService.findUserById(ctx.message.from.id);
+        if (!id) {
+          if (id !== ctx.update.message.from.id) {
+            let body = {
+              id: ctx.update.message.from.id,
+              username: ctx.update.message.from.username,
+              firstname: ctx.update.message.from.first_name,
+              isBot: ctx.update.message.from.is_bot,
+            };
+            await this.userService.addUser(body);
+          }
         }
       }
     } catch (error) {
