@@ -1,7 +1,6 @@
 import { UserService } from './../../users/user.service';
 import { Injectable } from '@nestjs/common';
 import { Update, Ctx, Start, On, Hears, Command } from 'nestjs-telegraf';
-import { throws } from 'assert';
 
 @Injectable()
 @Update()
@@ -43,7 +42,7 @@ export class TelegrafUpdateService {
         }
       }
     } catch (error) {
-      throws(error);
+      console.log(error);
     }
   }
 
@@ -60,7 +59,26 @@ export class TelegrafUpdateService {
     console.log(
       `___________________Have User Leave Chat________________________________`,
     );
-    console.log(ctx);
+    try {
+      if (ctx.update.message.left_chat_member.is_bot === false) {
+        const id = await this.userService.findUserById(
+          ctx.update.message.left_chat_member.id,
+        );
+        if (!id) {
+          if (id !== ctx.update.message.left_chat_member.id) {
+            let body = {
+              id: ctx.update.message.left_chat_member.id,
+              username: ctx.update.message.left_chat_member.username,
+              firstname: ctx.update.message.left_chat_member.first_name,
+              isBot: ctx.update.message.left_chat_member.is_bot,
+            };
+            await this.userService.addUser(body);
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   @Hears('hi')
@@ -91,7 +109,7 @@ export class TelegrafUpdateService {
         }
       }
     } catch (error) {
-      throws(error);
+      console.log(error);
     }
   }
 
