@@ -1,6 +1,7 @@
 import { UserService } from '../../users/user.service';
 import { Injectable } from '@nestjs/common';
 import { Update, Ctx, Start, On, Hears, Command } from 'nestjs-telegraf';
+import { Markup } from 'telegraf';
 
 @Injectable()
 @Update()
@@ -9,8 +10,22 @@ export class TelegrafUpdateService {
 
   @Start()
   async start(@Ctx() ctx: any) {
-    console.log(ctx);
-    await ctx.reply('Welcome');
+    const botName = ctx.botInfo.username;
+    const text = `สวัสดีคะ ฉันชื่อ${ctx.botInfo.first_name} มีหน้าที่ช่วยจัดการกลุ่มและส่งข้อความ กรุณา คลิก Add เพื่อให้${ctx.botInfo.first_name} สามารถจัดการได้`;
+
+    if (ctx.message.chat.type !== 'group') {
+      await ctx.reply(
+        `${text}`,
+        Markup.inlineKeyboard([
+          Markup.button.url(
+            `Add ${ctx.botInfo.first_name} to group 🔥`,
+            `https://t.me/${botName}?startgroup=true`,
+          ),
+        ]),
+      );
+    } else {
+      await ctx.reply(`ข้อความจากระบบ ที่ตั้ง`);
+    }
   }
 
   @On('my_chat_member')
