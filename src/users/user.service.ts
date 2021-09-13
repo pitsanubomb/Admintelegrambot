@@ -37,4 +37,12 @@ export class UserService {
       // throws(error);
     }
   }
+  async findUserByIdError(id: number): Promise<any> {
+    try {
+      return await this.teleUserrepo.findOneOrFail({ where: { id: id } });
+    } catch (error) {
+      // console.log(`Have error`)
+      throws(error);
+    }
+  }
 }
