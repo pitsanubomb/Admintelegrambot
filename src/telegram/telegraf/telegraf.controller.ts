@@ -4,7 +4,7 @@ import {
   Controller,
   Post,
   HttpException,
-  HttpStatus
+  HttpStatus,
 } from '@nestjs/common';
 import { TelegrafService } from './telegraf.service';
 
@@ -19,7 +19,7 @@ export class TelegrafController {
   async postData(@Body() data: any) {
     try {
       await this.userService.findUserById(data.id);
-      this.telegraf.sendMessage(data.id, data.message);
+      return this.telegraf.sendMessage(data.id, data.message);
     } catch (error) {
       throw new HttpException(
         { messsage: `ไม่สามารถส่งข้อความได้`, error },
@@ -32,7 +32,7 @@ export class TelegrafController {
   async postDataHTml(@Body() data: any) {
     try {
       await this.userService.findUserById(data.id);
-      this.telegraf.sendHTMLMessage(data.id, data.message);
+      return this.telegraf.sendHTMLMessage(data.id, data.message);
     } catch (error) {
       throw new HttpException(
         { messsage: `ไม่สามารถส่งข้อความได้`, error },
