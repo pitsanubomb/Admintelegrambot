@@ -2,18 +2,25 @@ import { UserService } from '../../users/user.service';
 import { Injectable } from '@nestjs/common';
 import { Update, Ctx, Start, On, Hears, Command } from 'nestjs-telegraf';
 import { Markup } from 'telegraf';
+import { GroupService } from 'src/groups/group.service';
 
 @Injectable()
 @Update()
 export class TelegrafUpdateService {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly groupService: GroupService,
+  ) {}
 
   @Start()
   async start(@Ctx() ctx: any) {
     const botName = ctx.botInfo.username;
     const text = `สวัสดีคะ ฉันชื่อ${ctx.botInfo.first_name} มีหน้าที่ช่วยจัดการกลุ่มและส่งข้อความ กรุณา คลิก Add เพื่อให้${ctx.botInfo.first_name} สามารถจัดการได้`;
 
-    if (ctx.message.chat.type !== 'group') {
+    if (
+      ctx.message.chat.type !== 'group' &&
+      ctx.message.chat.type !== 'supergroup'
+    ) {
       await ctx.reply(
         `${text}`,
         Markup.inlineKeyboard([
@@ -25,6 +32,26 @@ export class TelegrafUpdateService {
       );
     } else {
       await ctx.reply(`ข้อความจากระบบ ที่ตั้ง`);
+      if (ctx.message.text !== `/start`) {
+        try {
+          const groupId = await this.groupService.findGroupById(
+            ctx.message.chat.id,
+          );
+          if (!groupId) {
+            let body = {
+              id: ctx.message.chat.id,
+              groupname: ctx.message.chat.title,
+              grouptype: ctx.message.chat.type,
+              isAdminmember:
+                ctx.message.chat.all_members_are_administrators || false,
+            };
+
+            await this.groupService.addGroup(body);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
   }
 
@@ -108,7 +135,6 @@ export class TelegrafUpdateService {
 
   @On('text')
   async onText(ctx: any) {
-    console.log(ctx.message.chat);
     try {
       if (ctx.message.from.is_bot === false) {
         const id = await this.userService.findUserById(ctx.message.from.id);

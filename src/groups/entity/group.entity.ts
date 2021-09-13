@@ -6,7 +6,7 @@ export class Telegramgroup {
   uid: string;
 
   @Index()
-  @Column()
+  @Column({ type: 'bigint' })
   id: number;
 
   @Index()

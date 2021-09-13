@@ -33,4 +33,8 @@ export class TelegrafService {
   getMe() {
     return this.bot.telegram.getMe();
   }
+
+  getInfoChat(id: string | number) {
+    return this.bot.telegram.getChat(id);
+  }
 }

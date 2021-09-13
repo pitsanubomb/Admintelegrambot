@@ -1,3 +1,4 @@
+import { GroupModule } from './../../groups/group.module';
 import { TelegrafUpdateService } from './telegraf.update.serivce';
 import { TelegrafService } from './telegraf.service';
 import { Module } from '@nestjs/common';
@@ -17,6 +18,7 @@ import { Telegramuser } from 'src/users/entity/telegramuser.entity';
     TypeOrmModule.forFeature([Telegramuser]),
     Telegraf,
     UserModule,
+    GroupModule,
   ],
   controllers: [TelegrafController],
   providers: [TelegrafService, TelegrafUpdateService, UserService],
