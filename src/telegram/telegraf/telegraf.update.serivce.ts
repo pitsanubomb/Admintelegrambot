@@ -1,4 +1,4 @@
-import { UserService } from './../../users/user.service';
+import { UserService } from '../../users/user.service';
 import { Injectable } from '@nestjs/common';
 import { Update, Ctx, Start, On, Hears, Command } from 'nestjs-telegraf';
 
@@ -93,6 +93,7 @@ export class TelegrafUpdateService {
 
   @On('text')
   async onText(ctx: any) {
+    console.log(ctx.message.chat);
     try {
       if (ctx.message.from.is_bot === false) {
         const id = await this.userService.findUserById(ctx.message.from.id);

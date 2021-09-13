@@ -5,6 +5,7 @@ import {
   Post,
   HttpException,
   HttpStatus,
+  Get,
 } from '@nestjs/common';
 import { TelegrafService } from './telegraf.service';
 
@@ -14,6 +15,11 @@ export class TelegrafController {
     private readonly telegraf: TelegrafService,
     private readonly userService: UserService,
   ) {}
+
+  @Get('me')
+  async getMe() {
+    return await this.telegraf.getMe();
+  }
 
   @Post()
   async postData(@Body() data: any) {

@@ -29,4 +29,8 @@ export class TelegrafService {
   ) {
     return this.bot.telegram.sendPhoto(id, img, this.createButton(data, show));
   }
+
+  getMe() {
+    return this.bot.telegram.getMe();
+  }
 }
