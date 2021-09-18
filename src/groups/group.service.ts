@@ -20,9 +20,18 @@ export class GroupService {
     }
   }
 
-  async findGroupById(groupId: number): Promise<any> {
+  async findGroupById(groupId: string | number): Promise<any> {
     try {
       return await this.teleGrouprepo.findOneOrFail({ where: { id: groupId } });
     } catch (error) {}
+  }
+
+  async findAll(): Promise<any> {
+    try {
+      const [res, count] = await this.teleGrouprepo.findAndCount();
+      return { data: res, count: count };
+    } catch (error) {
+      throws(error);
+    }
   }
 }
