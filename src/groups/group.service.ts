@@ -34,4 +34,14 @@ export class GroupService {
       throws(error);
     }
   }
+
+  async findAndEdit(groupId: number, name: string): Promise<any> {
+    try {
+      console.log(name);
+      return await this.teleGrouprepo.update(
+        { id: groupId },
+        { groupname: name },
+      );
+    } catch (error) {}
+  }
 }

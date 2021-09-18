@@ -98,9 +98,6 @@ export class TelegrafUpdateService {
 
   @On('left_chat_member')
   async onLeftChatMember(ctx: any) {
-    console.log(
-      `___________________Have User Leave Chat________________________________`,
-    );
     try {
       if (ctx.update.message.left_chat_member.is_bot === false) {
         const id = await this.userService.findUserById(
@@ -121,6 +118,15 @@ export class TelegrafUpdateService {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  @On('new_chat_title')
+  async onnewChatTitle(ctx: any) {
+    console.log(ctx.update);
+    const t = await this.groupService.findAndEdit(
+      ctx.update.message.chat.id,
+      ctx.update.message.new_chat_title,
+    );
   }
 
   @Hears('hi')
