@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectBot } from 'nestjs-telegraf';
 import { Markup, Telegraf } from 'telegraf';
 
@@ -34,7 +34,14 @@ export class TelegrafService {
     return this.bot.telegram.getMe();
   }
 
-  getInfoChat(id: string | number) {
-    return this.bot.telegram.getChat(id);
+  async getInfoChat(id: string | number) {
+    try {
+      return await this.bot.telegram.getChat(id);
+    } catch (error) {
+      throw new HttpException(
+        { message: error.response },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

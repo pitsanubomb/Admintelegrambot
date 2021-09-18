@@ -25,46 +25,28 @@ export class TelegrafController {
 
   @Post('group')
   async postGroupData(@Body() data: any) {
-    try {
-      await this.groupService.findGroupById(data.id);
-      return this.telegraf.sendMessage(data.id, data.message);
-    } catch (error) {
-      throw new HttpException(
-        { messsage: `ไม่สามารถส่งข้อความได้`, error },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    await this.telegraf.getInfoChat(data.id);
+    await this.groupService.findGroupById(data.id);
+    return this.telegraf.sendMessage(data.id, data.message);
   }
 
   @Post(`group/html`)
   async postgroupDataHTml(@Body() data: any) {
-    try {
-      await this.groupService.findGroupById(data.id);
-      return this.telegraf.sendHTMLMessage(data.id, data.message);
-    } catch (error) {
-      throw new HttpException(
-        { messsage: `ไม่สามารถส่งข้อความได้`, error },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    await this.telegraf.getInfoChat(data.id);
+    await this.groupService.findGroupById(data.id);
+    return this.telegraf.sendHTMLMessage(data.id, data.message);
   }
 
   @Post(`group/image`)
   async postgroupDataImage(@Body() data: any) {
-    try {
-      await this.groupService.findGroupById(data.id);
-      return this.telegraf.sendImageMessage(
-        data.id,
-        data.image,
-        data.show,
-        data.button,
-      );
-    } catch (error) {
-      throw new HttpException(
-        { messsage: `ไม่สามารถส่งข้อความได้`, error },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    await this.telegraf.getInfoChat(data.id);
+    await this.groupService.findGroupById(data.id);
+    return this.telegraf.sendImageMessage(
+      data.id,
+      data.image,
+      data.show,
+      data.button,
+    );
   }
 
   @Post()

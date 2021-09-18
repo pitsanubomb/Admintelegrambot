@@ -1,3 +1,4 @@
+import { TelegrafService } from './../telegram/telegraf/telegraf.service';
 import {
   Controller,
   Get,
@@ -9,7 +10,10 @@ import { GroupService } from './group.service';
 
 @Controller(`group`)
 export class GroupController {
-  constructor(private readonly groupService: GroupService) {}
+  constructor(
+    private readonly groupService: GroupService,
+    private readonly telegraf: TelegrafService,
+  ) {}
 
   @Get()
   async getAll(): Promise<any> {
@@ -17,7 +21,7 @@ export class GroupController {
       return await this.groupService.findAll();
     } catch (error) {
       throw new HttpException(
-        { message: `can't Find group`, error },
+        { message: `ไม่สามารถค้นหากลุ่มได้`, error },
         HttpStatus.BAD_REQUEST,
       );
     }
@@ -25,13 +29,12 @@ export class GroupController {
 
   @Get(`:id`)
   async getById(@Param(`id`) id: string | number) {
-    try {
-      return await this.groupService.findGroupById(id);
-    } catch (error) {
-      throw new HttpException(
-        { message: `can't Find group ${id}`, error },
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    await this.telegraf.getInfoChat(id);
+    return await this.groupService.findGroupById(id);
+  }
+
+  @Get(`tele/:id`)
+  async getByIdTele(@Param(`id`) id: string | number) {
+    return await this.telegraf.getInfoChat(id);
   }
 }
