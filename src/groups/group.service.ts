@@ -43,4 +43,16 @@ export class GroupService {
       );
     } catch (error) {}
   }
+
+  async findAndEditId(groupId: number, editId: number): Promise<any> {
+    try {
+      return await this.teleGrouprepo.update({ id: groupId }, { id: editId });
+    } catch (error) {}
+  }
+
+  async removeGroup(groupId: number): Promise<any> {
+    try {
+      return await this.teleGrouprepo.delete({ id: groupId });
+    } catch (error) {}
+  }
 }

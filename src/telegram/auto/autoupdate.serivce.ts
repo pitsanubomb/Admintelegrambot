@@ -6,7 +6,7 @@ import { GroupService } from 'src/groups/group.service';
 
 @Injectable()
 @Update()
-export class TelegrafUpdateService {
+export class AutoUpdateService {
   constructor(
     private readonly userService: UserService,
     private readonly groupService: GroupService,
@@ -55,14 +55,12 @@ export class TelegrafUpdateService {
     }
   }
 
-  @On('my_chat_member')
-  async onMychatmem(@Ctx() ctx: any) {
-    console.log(
-      `___________________Event Group Chat________________________________`,
-    );
-    console.log(ctx);
-    console.log(ctx.chat);
-  }
+  // @On('my_chat_member')
+  // async onMychatmem(@Ctx() ctx: any) {
+  //   console.log(
+  //     `___________________Event Group Chat________________________________`,
+  //   );
+  // }
 
   @On('new_chat_members')
   async onNewChat(@Ctx() ctx: any) {
@@ -88,12 +86,26 @@ export class TelegrafUpdateService {
     }
   }
 
-  @On('supergroup_chat_created')
-  async oneCreateAdmin(@Ctx() ctx: any) {
-    console.log(
-      `___________________Have Create Admin________________________________`,
-    );
-    console.log(ctx);
+  @On('group_chat_created')
+  async onGroupChatCreated(@Ctx() ctx: any) {
+    try {
+      const groupId = await this.groupService.findGroupById(
+        ctx.message.chat.id,
+      );
+      if (!groupId) {
+        let body = {
+          id: ctx.message.chat.id,
+          groupname: ctx.message.chat.title,
+          grouptype: ctx.message.chat.type,
+          isAdminmember:
+            ctx.message.chat.all_members_are_administrators || false,
+        };
+
+        await this.groupService.addGroup(body);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   @On('left_chat_member')
@@ -114,10 +126,23 @@ export class TelegrafUpdateService {
             await this.userService.addUser(body);
           }
         }
+      } else {
+        console.log(ctx.update.message);
+        // await this.groupService.removeGroup()
       }
     } catch (error) {
       console.log(error);
     }
+  }
+
+  @On('migrate_to_chat_id')
+  async migrateFromChat(ctx: any) {
+    try {
+      await this.groupService.findAndEditId(
+        ctx.update.message.from.id,
+        ctx.update.migrate_to_chat_id,
+      );
+    } catch (error) {}
   }
 
   @On('new_chat_title')

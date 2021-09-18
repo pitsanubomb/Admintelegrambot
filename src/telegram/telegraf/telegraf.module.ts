@@ -1,5 +1,4 @@
 import { GroupModule } from './../../groups/group.module';
-import { TelegrafUpdateService } from './telegraf.update.serivce';
 import { TelegrafService } from './telegraf.service';
 import { Module } from '@nestjs/common';
 import { TelegrafModule } from 'nestjs-telegraf';
@@ -9,6 +8,7 @@ import { Telegraf } from 'telegraf';
 import { UserModule } from 'src/users/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Telegramuser } from 'src/users/entity/telegramuser.entity';
+import { AutoUpdateService } from '../auto/autoupdate.serivce';
 
 @Module({
   imports: [
@@ -21,6 +21,6 @@ import { Telegramuser } from 'src/users/entity/telegramuser.entity';
     GroupModule,
   ],
   controllers: [TelegrafController],
-  providers: [TelegrafService, TelegrafUpdateService, UserService],
+  providers: [TelegrafService, AutoUpdateService, UserService],
 })
 export class TelegramModule {}
