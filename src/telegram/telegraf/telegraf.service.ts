@@ -30,6 +30,17 @@ export class TelegrafService {
     return this.bot.telegram.sendPhoto(id, img, this.createButton(data, show));
   }
 
+  sendMessageGetContact(id: string | number, message: string) {
+    return this.bot.telegram.sendMessage(id, `  ${message}`, {
+      reply_markup: {
+        keyboard: [
+          [{ text: `📲 คลิกเพื่อให้ช่องทางการติดต่อ`, request_contact: true }],
+        ],
+        one_time_keyboard: true,
+      },
+    });
+  }
+
   getMe() {
     return this.bot.telegram.getMe();
   }

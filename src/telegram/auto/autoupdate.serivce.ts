@@ -166,6 +166,7 @@ export class AutoUpdateService {
 
   @On('text')
   async onText(ctx: any) {
+    console.log(ctx.update);
     try {
       if (ctx.message.from.is_bot === false) {
         const id = await this.userService.findUserById(ctx.message.from.id);
@@ -188,13 +189,11 @@ export class AutoUpdateService {
 
   @On('message')
   async onMessage(ctx: any) {
-    // await ctx.reply('aaa')
-    // console.log(ctx.update.message);
-    console.log(
-      `___________________Have Some Message________________________________`,
-    );
-    console.log(ctx.update);
-    // console.log(ctx.update);
+    if (ctx.message.contact) {
+      const phoneNo = ctx.update.message.contact.phone_number;
+      const userId = ctx.update.message.contact.user_id;
+      await this.userService.findAndEditPhone(userId, phoneNo);
+    }
   }
 
   // @Help()

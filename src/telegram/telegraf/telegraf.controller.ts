@@ -62,6 +62,19 @@ export class TelegrafController {
     }
   }
 
+  @Post(`contact`)
+  async postDataContact(@Body() data: any) {
+    try {
+      await this.userService.findUserByIdError(data.id);
+      await this.telegraf.sendMessageGetContact(data.id, data.message);
+    } catch (error) {
+      throw new HttpException(
+        { messsage: `ไม่สามารถส่งข้อความขอเบอร์โทรได้ได้`, error },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
   @Post(`html`)
   async postDataHTml(@Body() data: any) {
     try {

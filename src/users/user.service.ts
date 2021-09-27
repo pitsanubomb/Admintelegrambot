@@ -37,6 +37,7 @@ export class UserService {
       // throws(error);
     }
   }
+
   async findUserByIdError(id: number): Promise<any> {
     try {
       return await this.teleUserrepo.findOneOrFail({ where: { id: id } });
@@ -44,5 +45,11 @@ export class UserService {
       // console.log(`Have error`)
       throws(error);
     }
+  }
+
+  async findAndEditPhone(id: number, phoneEdit: string): Promise<any> {
+    try {
+      return await this.teleUserrepo.update({ id: id }, { phone: phoneEdit });
+    } catch (error) {}
   }
 }
