@@ -9,6 +9,7 @@ import { UserModule } from 'src/users/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Telegramuser } from 'src/users/entity/telegramuser.entity';
 import { AutoUpdateService } from '../auto/autoupdate.serivce';
+import { ChannelModule } from 'src/channel/channel.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { AutoUpdateService } from '../auto/autoupdate.serivce';
     Telegraf,
     UserModule,
     GroupModule,
+    ChannelModule,
   ],
   controllers: [TelegrafController],
   providers: [TelegrafService, AutoUpdateService, UserService],

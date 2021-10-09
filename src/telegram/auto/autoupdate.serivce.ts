@@ -1,3 +1,4 @@
+import { ChannelService } from './../../channel/channel.service';
 import { UserService } from '../../users/user.service';
 import { Injectable } from '@nestjs/common';
 import { Update, Ctx, Start, On, Hears, Command } from 'nestjs-telegraf';
@@ -10,6 +11,7 @@ export class AutoUpdateService {
   constructor(
     private readonly userService: UserService,
     private readonly groupService: GroupService,
+    private readonly channelService: ChannelService,
   ) {}
 
   @Start()
@@ -55,17 +57,28 @@ export class AutoUpdateService {
     }
   }
 
-  // @On('my_chat_member')
-  // async onMychatmem(@Ctx() ctx: any) {
-  //   console.log(
-  //     `___________________Event Group Chat________________________________`,
-  //   );
-  //   console.log(ctx);
-  //   console.log(ctx.update.my_chat_member);
-  // }
+  @On('my_chat_member')
+  async onMychatmem(@Ctx() ctx: any) {
+    console.log(
+      `___________________Event Group Chat________________________________`,
+    );
+    // console.log(ctx);
+    console.log(ctx.update.my_chat_member);
+    const { id, title } = ctx.update.my_chat_member.chat;
+    const findId = await this.channelService.findChannelById(id);
+
+    if (!findId) {
+      const body = {
+        id: id,
+        title: title,
+      };
+      await this.channelService.addChannel(body);
+    }
+  }
 
   @On('new_chat_members')
   async onNewChat(@Ctx() ctx: any) {
+    console.log(`${ctx} And Have Join . . .`);
     try {
       if (ctx.message.is_bot === false) {
         const id = await this.userService.findUserById(
