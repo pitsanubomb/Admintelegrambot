@@ -60,6 +60,8 @@ export class AutoUpdateService {
   //   console.log(
   //     `___________________Event Group Chat________________________________`,
   //   );
+  //   console.log(ctx);
+  //   console.log(ctx.update.my_chat_member);
   // }
 
   @On('new_chat_members')
@@ -79,6 +81,25 @@ export class AutoUpdateService {
             };
             await this.userService.addUser(body);
           }
+        }
+      } else {
+        try {
+          const groupId = await this.groupService.findGroupById(
+            ctx.message.chat.id,
+          );
+          if (!groupId) {
+            let body = {
+              id: ctx.message.chat.id,
+              groupname: ctx.message.chat.title,
+              grouptype: ctx.message.chat.type,
+              isAdminmember:
+                ctx.message.chat.all_members_are_administrators || false,
+            };
+
+            await this.groupService.addGroup(body);
+          }
+        } catch (error) {
+          console.log(error);
         }
       }
     } catch (error) {
@@ -137,21 +158,34 @@ export class AutoUpdateService {
 
   @On('migrate_to_chat_id')
   async migrateFromChat(ctx: any) {
+    console.log(ctx.update.message);
     try {
       await this.groupService.findAndEditId(
-        ctx.update.message.from.id,
-        ctx.update.migrate_to_chat_id,
+        ctx.update.message.chat.id,
+        ctx.update.message.migrate_to_chat_id,
       );
     } catch (error) {}
   }
 
   @On('new_chat_title')
   async onnewChatTitle(ctx: any) {
-    console.log(ctx.update);
+    // console.log(ctx.update);
     const t = await this.groupService.findAndEdit(
       ctx.update.message.chat.id,
       ctx.update.message.new_chat_title,
     );
+  }
+
+  @On('channel_post')
+  async onchannelPost(@Ctx() ctx: any) {
+    console.log(`______Chanel Have some . . .__________`);
+    console.log(ctx);
+  }
+
+  @On('channel_chat_created')
+  async oneChanelcrate(@Ctx() ctx: any) {
+    console.log(`_________Chanal with some . . .________`);
+    console.log(ctx);
   }
 
   @Hears('hi')

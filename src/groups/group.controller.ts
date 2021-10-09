@@ -29,8 +29,8 @@ export class GroupController {
 
   @Get(`:id`)
   async getById(@Param(`id`) id: string | number) {
-    await this.telegraf.getInfoChat(id);
-    return await this.groupService.findGroupById(id);
+    return await this.telegraf.getInfoChat(id);
+    // return await this.groupService.findGroupById(id);
   }
 
   @Get(`tele/:id`)
