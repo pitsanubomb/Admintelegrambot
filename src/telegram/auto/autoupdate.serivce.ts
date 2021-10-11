@@ -67,7 +67,7 @@ export class AutoUpdateService {
     const { id, title } = ctx.update.my_chat_member.chat;
     const findId = await this.channelService.findChannelById(id);
 
-    if (!findId) {
+    if (!findId && ctx.update.my_chat_member.type === `chanel`) {
       const body = {
         id: id,
         title: title,
@@ -162,7 +162,7 @@ export class AutoUpdateService {
         }
       } else {
         console.log(ctx.update.message);
-        // await this.groupService.removeGroup()
+        // await this.groupService.removeGroup(ctx.update.message.left_chat_member.id)
       }
     } catch (error) {
       console.log(error);
