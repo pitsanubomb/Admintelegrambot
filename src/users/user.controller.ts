@@ -24,6 +24,11 @@ export class UserController {
   }
 
   @Get(':id')
+  async getById(@Param(`id`) id: number) {
+    return await this.userService.findUserByIdError(id);
+  }
+
+  @Get('info/:id')
   async getChat(@Param(`id`) id: number) {
     return await this.userService.findUserById(id);
   }

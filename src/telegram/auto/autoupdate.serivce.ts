@@ -213,7 +213,7 @@ export class AutoUpdateService {
 
   @On('text')
   async onText(ctx: any) {
-    console.log(ctx.update);
+    // console.log('Have some text . . .')
     try {
       if (ctx.message.from.is_bot === false) {
         const id = await this.userService.findUserById(ctx.message.from.id);
@@ -233,6 +233,7 @@ export class AutoUpdateService {
       console.log(error);
     }
   }
+
 
   @On('message')
   async onMessage(ctx: any) {

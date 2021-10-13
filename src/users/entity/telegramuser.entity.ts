@@ -6,7 +6,7 @@ export class Telegramuser {
   uid: string;
 
   @Index()
-  @Column()
+  @Column({ unique: true })
   id: Number;
 
   @Index()
