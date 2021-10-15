@@ -11,8 +11,12 @@ export class TelegrafService {
     return Markup.inlineKeyboard(but, { columns: show });
   }
 
-  sendMessage(id: string | number, message: string) {
-    return this.bot.telegram.sendMessage(id, message);
+  async sendMessage(id: string | number, message: string) {
+    try {
+      return await this.bot.telegram.sendMessage(id, message);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 
   sendHTMLMessage(id: string | number, message: string) {

@@ -1,14 +1,23 @@
 import { ChannelService } from './../../channel/channel.service';
 import { UserService } from '../../users/user.service';
 import { Injectable } from '@nestjs/common';
-import { Update, Ctx, Start, On, Hears, Command } from 'nestjs-telegraf';
-import { Markup } from 'telegraf';
+import {
+  Update,
+  Ctx,
+  Start,
+  On,
+  Hears,
+  Command,
+  InjectBot,
+} from 'nestjs-telegraf';
+import { Markup, Telegraf } from 'telegraf';
 import { GroupService } from 'src/groups/group.service';
 
 @Injectable()
 @Update()
 export class AutoUpdateService {
   constructor(
+    @InjectBot() private bot: Telegraf<any>,
     private readonly userService: UserService,
     private readonly groupService: GroupService,
     private readonly channelService: ChannelService,
@@ -213,9 +222,24 @@ export class AutoUpdateService {
 
   @On('text')
   async onText(ctx: any) {
-    // console.log('Have some text . . .')
+    console.log('Have some text . . .');
+    
+    // console.log(ctx.update.message);
+    // try {
+    //   await this.bot.telegram.setChatPermissions(ctx.update.message.from.id, {
+    //     can_send_messages: false,
+    //   });
+    // } catch (e) {
+    //   console.log(e.response);
+    // }
+    // console.log(
+    //   await this.bot.telegram.getChatMember(
+    //     ctx.message.chat.id,
+    //     ctx.message.from.id,
+    //   ),
+    // );
     try {
-      if (ctx.message.from.is_bot === false) {
+      if (ctx.update.message.from.is_bot === false) {
         const id = await this.userService.findUserById(ctx.message.from.id);
         if (!id) {
           if (id !== ctx.update.message.from.id) {
@@ -233,7 +257,6 @@ export class AutoUpdateService {
       console.log(error);
     }
   }
-
 
   @On('message')
   async onMessage(ctx: any) {
