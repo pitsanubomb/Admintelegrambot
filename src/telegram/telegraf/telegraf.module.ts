@@ -14,7 +14,7 @@ import { ChannelModule } from 'src/channel/channel.module';
 @Module({
   imports: [
     TelegrafModule.forRoot({
-      token: `1911741281:AAFadVLZx6WgF_0pRtsb_KsL2ca3gvVtsvQ`,
+      token: `1999148298:AAFAU6RA01AvwqPrMWvgEhRA_dPDPDlZmMs`,
     }),
     TypeOrmModule.forFeature([Telegramuser]),
     Telegraf,
