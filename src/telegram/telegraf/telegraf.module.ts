@@ -1,3 +1,4 @@
+import { UploadeModule } from './../../upload/upload.module';
 import { GroupModule } from './../../groups/group.module';
 import { TelegrafService } from './telegraf.service';
 import { Module } from '@nestjs/common';
@@ -21,6 +22,7 @@ import { ChannelModule } from 'src/channel/channel.module';
     UserModule,
     GroupModule,
     ChannelModule,
+    UploadeModule,
   ],
   controllers: [TelegrafController],
   providers: [TelegrafService, AutoUpdateService, UserService],
