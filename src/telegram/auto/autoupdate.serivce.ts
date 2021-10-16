@@ -69,14 +69,14 @@ export class AutoUpdateService {
   @On('my_chat_member')
   async onMychatmem(@Ctx() ctx: any) {
     console.log(
-      `___________________Event Group Chat________________________________`,
+      `___________________Event Chat________________________________`,
     );
     // console.log(ctx);
     console.log(ctx.update.my_chat_member);
-    const { id, title } = ctx.update.my_chat_member.chat;
+    const { id, title, type } = ctx.update.my_chat_member.chat;
     const findId = await this.channelService.findChannelById(id);
 
-    if (!findId && ctx.update.my_chat_member.type === `chanel`) {
+    if (!findId && type === `channel`) {
       const body = {
         id: id,
         title: title,
@@ -201,7 +201,7 @@ export class AutoUpdateService {
   @On('channel_post')
   async onchannelPost(@Ctx() ctx: any) {
     console.log(`______Chanel Have some . . .__________`);
-    console.log(ctx);
+    console.log(ctx.update);
   }
 
   @On('channel_chat_created')
@@ -223,7 +223,7 @@ export class AutoUpdateService {
   @On('text')
   async onText(ctx: any) {
     console.log('Have some text . . .');
-    
+
     // console.log(ctx.update.message);
     // try {
     //   await this.bot.telegram.setChatPermissions(ctx.update.message.from.id, {
