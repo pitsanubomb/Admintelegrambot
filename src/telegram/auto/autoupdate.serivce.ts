@@ -56,7 +56,6 @@ export class AutoUpdateService {
               isAdminmember:
                 ctx.message.chat.all_members_are_administrators || false,
             };
-
             await this.groupService.addGroup(body);
           }
         } catch (error) {
@@ -225,19 +224,51 @@ export class AutoUpdateService {
     console.log('Have some text . . .');
 
     // console.log(ctx.update.message);
-    // try {
-    //   await this.bot.telegram.setChatPermissions(ctx.update.message.from.id, {
-    //     can_send_messages: false,
-    //   });
-    // } catch (e) {
-    //   console.log(e.response);
-    // }
-    // console.log(
-    //   await this.bot.telegram.getChatMember(
-    //     ctx.message.chat.id,
-    //     ctx.message.from.id,
-    //   ),
-    // );
+    try {
+      const user = await this.bot.telegram.getChatMember(
+        ctx.message.chat.id,
+        ctx.message.from.id,
+      );
+
+      if (user.status === 'member') {
+        try {
+          await this.bot.telegram.deleteMessage(
+            ctx.message.chat.id,
+            ctx.message.message_id,
+          );
+        } catch (error) {
+          ctx.reply(
+            `Error ไม่สามารถลบข้อความได้ กรุณาให้สิทธิ์ Admin กับฉันด้วยคะ`,
+          );
+        }
+
+        try {
+        } catch (error) {
+          ctx.reply(
+            `Error ไม่สามารถใบ้ x User ไม่ให้ส่งข้อความได้ กรุณาให้สิทธิ์ Admin กับฉันด้วยคะ`,
+          );
+        }
+
+        await this.bot.telegram.restrictChatMember(
+          ctx.message.chat.id,
+          ctx.message.from.id,
+          {
+            permissions: {
+              can_send_messages: false,
+              can_send_media_messages: false,
+              can_add_web_page_previews: false,
+              can_send_other_messages: false,
+              can_change_info: false,
+              can_invite_users: false,
+              can_pin_messages: false,
+              can_send_polls: false,
+            },
+          },
+        );
+      }
+    } catch (e) {
+      console.log(e.response);
+    }
     try {
       if (ctx.update.message.from.is_bot === false) {
         const id = await this.userService.findUserById(ctx.message.from.id);
