@@ -6,6 +6,9 @@ export class Message {
   @PrimaryGeneratedColumn('uuid')
   uid: string;
 
+  @Column({ type: 'bigint', nullable: true })
+  mid: number;
+
   @Column()
   message: string;
 

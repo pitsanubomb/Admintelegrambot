@@ -203,6 +203,7 @@ export class AutoUpdateService {
     await this.channelService.addMessage(
       ctx.update.channel_post.chat.id,
       ctx.update.channel_post.text,
+      ctx.update.channel_post.message_id,
     );
   }
 

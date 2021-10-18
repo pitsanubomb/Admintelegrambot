@@ -31,6 +31,20 @@ export class ChannelService {
     }
   }
 
+  async findMessageByChannelId(id: string | number) {
+    try {
+      return await this.channelRepository.findOneOrFail({
+        where: { id: id },
+        relations: ['messages'],
+      });
+    } catch (error) {
+      throw new HttpException(
+        { message: `ไม่สามารถค้นหาชาแนลได้`, error: error },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
   async findChannelById(id: string | number) {
     try {
       return await this.channelRepository.findOneOrFail({
@@ -39,16 +53,14 @@ export class ChannelService {
     } catch (error) {}
   }
 
-  async addMessage(id: string | number, message: string) {
+  async addMessage(id: string | number, message: string, mid: number) {
     try {
-      let channel = await this.channelRepository.findOneOrFail({
-        where: { id: id },
-        relations: ['messages'],
+      let channel = await this.findMessageByChannelId(id);
+      const m: any = await this.messageRepository.save({
+        message: message,
+        mid: mid,
       });
-      const m: any = await this.messageRepository.save({ message: message });
       channel.messages.push(m);
-
-      console.log(channel)
       await this.channelRepository.save(channel);
     } catch (error) {}
   }

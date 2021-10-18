@@ -7,6 +7,7 @@ import {
   HttpException,
   HttpStatus,
   Get,
+  Param,
 } from '@nestjs/common';
 import { TelegrafService } from './telegraf.service';
 
@@ -21,6 +22,11 @@ export class TelegrafController {
   @Get('me')
   async getMe() {
     return await this.telegraf.getMe();
+  }
+
+  @Post('foward/:to')
+  async forwardMessage(@Body() data: any, @Param('to') to: string | number) {
+    await this.telegraf.fowardMessage(to, data.from, data.mid);
   }
 
   @Post('group')

@@ -25,13 +25,21 @@ export class TelegrafService {
     });
   }
 
-  sendImageMessage(
+  async sendImageMessage(
     id: string | number,
     img: string,
     show: number,
     data: Object,
   ) {
-    return this.bot.telegram.sendPhoto(id, img, this.createButton(data, show));
+    return await this.bot.telegram.sendPhoto(
+      id,
+      img,
+      this.createButton(data, show),
+    );
+  }
+
+  async fowardMessage(to: string | number, from: string | number, mid: number) {
+    return await this.bot.telegram.forwardMessage(to, from, mid);
   }
 
   sendMessageGetContact(id: string | number, message: string) {
