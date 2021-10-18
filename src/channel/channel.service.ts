@@ -1,3 +1,4 @@
+import { Message } from './entity/message.entity';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -9,6 +10,8 @@ export class ChannelService {
   constructor(
     @InjectRepository(Channel)
     private readonly channelRepository: Repository<Channel>,
+    @InjectRepository(Message)
+    private readonly messageRepository: Repository<Message>,
   ) {}
 
   async addChannel(channel: channelDTO) {
@@ -33,6 +36,20 @@ export class ChannelService {
       return await this.channelRepository.findOneOrFail({
         where: { id: id },
       });
+    } catch (error) {}
+  }
+
+  async addMessage(id: string | number, message: string) {
+    try {
+      let channel = await this.channelRepository.findOneOrFail({
+        where: { id: id },
+        relations: ['messages'],
+      });
+      const m: any = await this.messageRepository.save({ message: message });
+      channel.messages.push(m);
+
+      console.log(channel)
+      await this.channelRepository.save(channel);
     } catch (error) {}
   }
 }

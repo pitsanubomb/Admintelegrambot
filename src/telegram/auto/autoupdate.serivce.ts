@@ -200,7 +200,10 @@ export class AutoUpdateService {
   @On('channel_post')
   async onchannelPost(@Ctx() ctx: any) {
     console.log(`______Chanel Have some . . .__________`);
-    console.log(ctx.update);
+    await this.channelService.addMessage(
+      ctx.update.channel_post.chat.id,
+      ctx.update.channel_post.text,
+    );
   }
 
   @On('channel_chat_created')

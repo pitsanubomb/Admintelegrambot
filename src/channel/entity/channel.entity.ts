@@ -1,4 +1,11 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Message } from './message.entity';
 
 @Entity()
 export class Channel {
@@ -12,4 +19,10 @@ export class Channel {
   @Index()
   @Column()
   title: string;
+
+  @OneToMany(() => Message, (message) => message.channel, {
+    cascade: true,
+    eager: true,
+  })
+  messages: Message[];
 }
