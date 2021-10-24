@@ -54,12 +54,18 @@ export class ChannelService {
     } catch (error) {}
   }
 
-  async addMessage(id: string | number, message: string, mid: number) {
+  async addMessage(
+    id: string | number,
+    message: string,
+    file: string | null,
+    mid: number,
+  ) {
     try {
       let channel = await this.findMessageByChannelId(id);
       const m: any = await this.messageRepository.save({
         message: message,
         mid: mid,
+        file: file
       });
       channel.messages.push(m);
       await this.channelRepository.save(channel);

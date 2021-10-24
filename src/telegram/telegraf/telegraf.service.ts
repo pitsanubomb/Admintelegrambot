@@ -46,6 +46,7 @@ export class TelegrafService {
     }
   }
 
+
   async fowardMessage(to: string | number, from: string | number, mid: number) {
     return await this.bot.telegram.forwardMessage(to, from, mid);
   }
@@ -73,6 +74,14 @@ export class TelegrafService {
         { message: error.response },
         HttpStatus.BAD_REQUEST,
       );
+    }
+  }
+
+  async getFile(fileid:string){
+    try {
+      return await this.bot.telegram.getFileLink(fileid);
+    } catch (error) {
+      console.log(error)
     }
   }
 }

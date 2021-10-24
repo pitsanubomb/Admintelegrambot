@@ -12,6 +12,10 @@ export class Message {
   @Column()
   message: string;
 
+  @Column({nullable: true})
+  file: string;
+
+
   @ManyToOne(() => Channel, (channel) => channel.messages)
   channel: Channel;
 }

@@ -200,9 +200,24 @@ export class AutoUpdateService {
   @On('channel_post')
   async onchannelPost(@Ctx() ctx: any) {
     console.log(`______Chanel Have some . . .__________`);
+    let file = null;
+    if (ctx.update.channel_post.video || ctx.update.channel_post.photo) {
+      let id: string;
+      if (ctx.update.channel_post.photo) {
+        const length = ctx.update.channel_post.photo.length;
+        id = ctx.update.channel_post.photo[length - 1].file_id;
+      } else {
+        id = ctx.update.channel_post.video.file_id;
+      }
+
+      const path = await this.bot.telegram.getFileLink(id);
+      file = path.href;
+    }
+    let text = ctx.update.channel_post.text || ctx.update.channel_post.caption;
     await this.channelService.addMessage(
       ctx.update.channel_post.chat.id,
-      ctx.update.channel_post.text,
+      text,
+      file,
       ctx.update.channel_post.message_id,
     );
   }
@@ -233,7 +248,7 @@ export class AutoUpdateService {
         ctx.message.chat.id,
         ctx.message.from.id,
       );
-      console.log(ctx.message.entities)
+      console.log(ctx.message.entities);
       // console.log(ctx.message.text.match(regex))
 
       if (user.status === 'member' && ctx.message.entities[0].type === 'url') {
