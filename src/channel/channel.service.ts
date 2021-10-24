@@ -22,7 +22,8 @@ export class ChannelService {
 
   async findAllChannel() {
     try {
-      return await this.channelRepository.findAndCount();
+      const [res, cout] = await this.channelRepository.findAndCount();
+      return { data: res, total: cout };
     } catch (error) {
       throw new HttpException(
         { message: `ไม่สามารถค้นหาชาแนลได้`, error: error },
