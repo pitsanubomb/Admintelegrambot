@@ -233,8 +233,10 @@ export class AutoUpdateService {
         ctx.message.chat.id,
         ctx.message.from.id,
       );
+      console.log(ctx.message.entities)
+      // console.log(ctx.message.text.match(regex))
 
-      if (user.status === 'member') {
+      if (user.status === 'member' && ctx.message.entities[0].type === 'url') {
         try {
           await this.bot.telegram.deleteMessage(
             ctx.message.chat.id,
@@ -253,22 +255,22 @@ export class AutoUpdateService {
           );
         }
 
-        await this.bot.telegram.restrictChatMember(
-          ctx.message.chat.id,
-          ctx.message.from.id,
-          {
-            permissions: {
-              can_send_messages: false,
-              can_send_media_messages: false,
-              can_add_web_page_previews: false,
-              can_send_other_messages: false,
-              can_change_info: false,
-              can_invite_users: false,
-              can_pin_messages: false,
-              can_send_polls: false,
-            },
-          },
-        );
+        // await this.bot.telegram.restrictChatMember(
+        //   ctx.message.chat.id,
+        //   ctx.message.from.id,
+        //   {
+        //     permissions: {
+        //       can_send_messages: false,
+        //       can_send_media_messages: false,
+        //       can_add_web_page_previews: false,
+        //       can_send_other_messages: false,
+        //       can_change_info: false,
+        //       can_invite_users: false,
+        //       can_pin_messages: false,
+        //       can_send_polls: false,
+        //     },
+        //   },
+        // );
       }
     } catch (e) {
       console.log(e.response);
