@@ -55,6 +55,16 @@ export class TelegrafController {
     );
   }
 
+  @Post(`group/video`)
+  async postvideoDataImage(@Body() data: any) {
+    await this.telegraf.getInfoChat(data.id);
+    await this.groupService.findGroupById(data.id);
+    return this.telegraf.sendVideo(
+      data.id,
+      data.video,
+    );
+  }
+
   @Post()
   async postData(@Body() data: any) {
     try {
@@ -103,6 +113,22 @@ export class TelegrafController {
         data.image,
         data.show,
         data.button,
+      );
+    } catch (error) {
+      throw new HttpException(
+        { messsage: `ไม่สามารถส่งข้อความได้`, error },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+  }
+
+  @Post(`video`)
+  async postDataVideo(@Body() data: any) {
+    try {
+      await this.userService.findUserByIdError(data.id);
+      return this.telegraf.sendVideo(
+        data.id,
+        data.video
       );
     } catch (error) {
       throw new HttpException(

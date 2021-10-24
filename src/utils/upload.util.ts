@@ -7,6 +7,13 @@ export const imageFileFilter = (req, file, callback) => {
   callback(null, true);
 };
 
+export const videoFileFilter = (req, file, callback) => {
+  if (!file.originalname.match(/\.(mp4)$/) && file.size <= 50000) {
+    return callback(new Error('Only video files are allowed!'), false);
+  }
+  callback(null, true);
+};
+
 export const editFileName = (req, file, callback) => {
   const name = file.originalname.split('.')[0];
   const fileExtName = extname(file.originalname);

@@ -38,6 +38,14 @@ export class TelegrafService {
     );
   }
 
+  async sendVideo(id: string | number, vido: string) {
+    try {
+      return await this.bot.telegram.sendVideo(id, vido);
+    } catch (error) {
+      throw new HttpException({error: error},HttpStatus.BAD_REQUEST)
+    }
+  }
+
   async fowardMessage(to: string | number, from: string | number, mid: number) {
     return await this.bot.telegram.forwardMessage(to, from, mid);
   }
