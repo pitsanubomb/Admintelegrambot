@@ -8,6 +8,7 @@ import {
   HttpStatus,
   Get,
   Param,
+  Res,
 } from '@nestjs/common';
 import { TelegrafService } from './telegraf.service';
 
@@ -22,6 +23,24 @@ export class TelegrafController {
   @Get('me')
   async getMe() {
     return await this.telegraf.getMe();
+  }
+
+  @Post('channel')
+  async postChannel(@Body() data: any) {
+    this.telegraf.sendImageMessage(data.id, data.img, data.show, data.data);
+  }
+
+  @Post('channel/message')
+  async postChannelMessage(@Body() data: any) {
+    this.telegraf.sendMessage(data.id, data.message);
+  }
+
+  @Post('media')
+  async postMedia(@Body() data: any,) {
+    // return data;
+    // res.sendFile(data.media[0].media, { root: './uploads/media' });
+    // data.media[0].media = 'attach://'+data.media[0].media;
+    return await this.telegraf.sendMedia(data.id, data.media);
   }
 
   @Post('foward/:to')
@@ -59,10 +78,7 @@ export class TelegrafController {
   async postvideoDataImage(@Body() data: any) {
     await this.telegraf.getInfoChat(data.id);
     await this.groupService.findGroupById(data.id);
-    return this.telegraf.sendVideo(
-      data.id,
-      data.video,
-    );
+    return this.telegraf.sendVideo(data.id, data.video);
   }
 
   @Post()
@@ -126,10 +142,7 @@ export class TelegrafController {
   async postDataVideo(@Body() data: any) {
     try {
       await this.userService.findUserByIdError(data.id);
-      return this.telegraf.sendVideo(
-        data.id,
-        data.video
-      );
+      return this.telegraf.sendVideo(data.id, data.video);
     } catch (error) {
       throw new HttpException(
         { messsage: `ไม่สามารถส่งข้อความได้`, error },

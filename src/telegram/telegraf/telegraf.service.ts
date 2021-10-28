@@ -38,14 +38,26 @@ export class TelegrafService {
     );
   }
 
-  async sendVideo(id: string | number, vido: string) {
+  async sendMedia(
+    id: string | number,
+    media: Array<any>,
+    show?: number,
+    data?: Object,
+  ) {
     try {
-      return await this.bot.telegram.sendVideo(id, vido);
+      return await this.bot.telegram.sendMediaGroup(id, media);
     } catch (error) {
-      throw new HttpException({error: error},HttpStatus.BAD_REQUEST)
+      throw new HttpException({ error: error }, HttpStatus.BAD_REQUEST);
     }
   }
 
+  async sendVideo(id: string | number, vido: string,caption?: string) {
+    try {
+      return await this.bot.telegram.sendVideo(id, vido);
+    } catch (error) {
+      throw new HttpException({ error: error }, HttpStatus.BAD_REQUEST);
+    }
+  }
 
   async fowardMessage(to: string | number, from: string | number, mid: number) {
     return await this.bot.telegram.forwardMessage(to, from, mid);
@@ -77,11 +89,11 @@ export class TelegrafService {
     }
   }
 
-  async getFile(fileid:string){
+  async getFile(fileid: string) {
     try {
       return await this.bot.telegram.getFileLink(fileid);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 }
