@@ -55,6 +55,24 @@ export class UploadController {
     };
   }
 
+  @Post('media')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads/media',
+        filename: editFileName,
+      }),
+      fileFilter: videoFileFilter,
+    }),
+  )
+  uploadMedia(@UploadedFile() file: Express.Multer.File) {
+    return {
+      originalname: file.originalname,
+      filename: file.filename,
+      size: file.size,
+    };
+  }
+
   @Get('img/:imgpath')
   getImage(@Param('imgpath') image: string, @Res() res: any) {
     return res.sendFile(image, { root: './uploads/images' });
@@ -63,5 +81,10 @@ export class UploadController {
   @Get('video/:filepath')
   getFile(@Param('filepath') file: string, @Res() res: any) {
     return res.sendFile(file, { root: './uploads/videos' });
+  }
+
+  @Get('meida/:filepath')
+  getMedia(@Param('filepath') file: string, @Res() res: any) {
+    return res.sendFile(file, { root: './uploads/media' });
   }
 }
